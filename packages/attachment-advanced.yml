@@ -11,6 +11,6 @@ latestNpmVersion: 1.1.2
 name: attachment-advanced
 npm: "@jrmc/attachment-advanced"
 repo: batosai/attachment-advanced#master
-status: stale
+status: archived
 type: 3rd-party
 website: https://github.com/batosai/attachment-advanced

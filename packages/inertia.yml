@@ -5,9 +5,9 @@ compatibility:
     "7": 7.x
 description: Official Inertia.js adapter for AdonisJS
 icon: inertia.png
-lastCommitAt: 2026-09-13T07:15:32Z
-lastReleaseAt: 2026-08-21T06:31:52.480Z
-latestNpmVersion: 5.0.1
+lastCommitAt: 2026-10-14T20:17:25Z
+lastReleaseAt: 2026-10-14T20:21:34.251Z
+latestNpmVersion: 5.0.4
 name: inertia
 npm: "@adonisjs/inertia"
 repo: adonisjs/inertia

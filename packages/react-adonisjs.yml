@@ -3,11 +3,16 @@ compatibility:
   adonis:
     "6": 6.x
     "7": 7.x
-description: Build fullstack React Router applications with AdonisJS
+description: An adapter for using React Router with AdonisJS
+directory: packages/adapter
+github: https://github.com/jarle/react-adonisjs
 icon: react-router.png
 lastCommitAt: 2025-10-06T18:51:47Z
 lastReleaseAt: 2025-10-05T10:03:33.909Z
 latestNpmVersion: 1.0.6
+maintainers:
+  - github: jarle
+    name: jarle
 name: react-adonisjs
 npm: "@matstack/react-adonisjs"
 repo: jarle/react-adonisjs

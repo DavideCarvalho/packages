@@ -8,8 +8,8 @@ directory: packages/core
 github: https://github.com/Julien-R44/tuyau
 icon: tuyau.png
 lastCommitAt: 2026-10-17T13:19:46Z
-lastReleaseAt: 2025-07-05T23:44:29.280Z
-latestNpmVersion: 0.2.10
+lastReleaseAt: 2026-10-17T11:08:05.518Z
+latestNpmVersion: 1.2.3
 maintainers:
   - github: Julien-R44
     name: Julien-R44

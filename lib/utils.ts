@@ -61,12 +61,8 @@ export async function checkGithubRepoRedirect(repo: string): Promise<string | nu
 
 export async function isRepoArchived(repo: string): Promise<boolean> {
   const { owner, name } = parseRepo(repo);
-  try {
-    const res = await octokit.repos.get({ owner, repo: name });
-    return res.data.archived ?? false;
-  } catch {
-    return false;
-  }
+  const res = await octokit.repos.get({ owner, repo: name });
+  return res.data.archived;
 }
 
 /**
@@ -104,18 +100,13 @@ export async function fetchNpmPackage(name: string): Promise<NpmPackageInfo> {
 }
 
 /**
- * Returns ISO date of the latest commit on the default branch, or null if unreachable.
+ * Returns ISO date of the latest commit on the default branch, or null if no date is available.
+ * API failures propagate so callers can preserve existing metadata.
  */
 export async function getLastCommitDate(repo: string): Promise<string | null> {
-  const [ownerRepo] = repo.split("#");
-  const [owner, name] = ownerRepo.split("/");
-  if (!owner || !name) return null;
-  try {
-    const res = await octokit.repos.listCommits({ owner, repo: name, per_page: 1 });
-    return res.data[0]?.commit.committer?.date ?? null;
-  } catch {
-    return null;
-  }
+  const { owner, name } = parseRepo(repo);
+  const res = await octokit.repos.listCommits({ owner, repo: name, per_page: 1 });
+  return res.data[0]?.commit.committer?.date ?? null;
 }
 
 /**

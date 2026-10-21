@@ -36,9 +36,10 @@ function parseRepo(repo: string): { owner: string; name: string; ref: string } {
   return { owner, name, ref };
 }
 
-export async function fetchGithubPkg(repo: string): Promise<GithubPkg> {
+export async function fetchGithubPkg(repo: string, directory?: string): Promise<GithubPkg> {
   const { owner, name, ref } = parseRepo(repo);
-  const url = `https://raw.githubusercontent.com/${owner}/${name}/${ref}/package.json`;
+  const path = directory ? `${directory.replace(/^\/+|\/+$/g, "")}/package.json` : "package.json";
+  const url = `https://raw.githubusercontent.com/${owner}/${name}/${ref}/${path}`;
   return await http.get(url).json<GithubPkg>();
 }
 

@@ -76,8 +76,8 @@ export async function sync(name: string, repo?: string, isNew = false): Promise<
 
   await sleep(FETCH_DELAY);
 
-  // 4. package.json
-  const ghPkg = await fetchGithubPkg(pkg.repo);
+  // 4. package.json (from `directory` for monorepos)
+  const ghPkg = await fetchGithubPkg(pkg.repo, pkg.directory);
   pkg.npm = ghPkg.name;
   if (ghPkg.description) pkg.description = ghPkg.description;
 

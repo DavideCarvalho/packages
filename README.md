@@ -85,6 +85,30 @@ pnpm sync
 pnpm build
 ```
 
+### Configure npm publishing
+
+The release workflow publishes public packages from `v*` tags using npm trusted publishing. It runs on GitHub-hosted runners with Node.js 24 and requires no `NPM_TOKEN` secret.
+
+1. If `@adonisjs/packages` does not exist on npm, sign in with an account that can publish under `@adonisjs`. Run `pnpm install --frozen-lockfile`, `pnpm check`, and `npm pack --dry-run`. Inspect the package contents, then run `npm publish --access public` to publish the initial version.
+2. In the package's npm settings, add a GitHub Actions trusted publisher with organization `adonisjs-community`, repository `packages`, and workflow filename `release.yml`. Leave the environment blank and allow direct `npm publish`.
+3. Complete the first OIDC publication within two days of creating the trusted publisher. After it succeeds, enable "Require two-factor authentication and disallow tokens" in the npm publishing settings.
+
+See the [npm trusted publishing documentation](https://docs.npmjs.com/trusted-publishers) for account requirements and troubleshooting.
+
+### Publish a new version
+
+From a clean, up-to-date `main` checkout, run:
+
+```bash
+pnpm check
+pnpm exec tsc --noEmit
+npm version patch
+git push origin main
+git push origin "v$(node -p "require('./package.json').version")"
+```
+
+Pushing the tag publishes the package. The tag must match the version in `package.json`. Published versions cannot be reused, including the version published manually during setup. The weekly healthcheck updates metadata but does not yet publish npm versions.
+
 ## Healthiness bot
 
 A weekly GitHub Action keeps the bot-owned metadata fields (`lastCommitAt`, `lastReleaseAt`, `latestNpmVersion`, `status`) fresh by auto-committing directly to `main`. It also maintains a long-lived **Dependency Dashboard** issue (label: `bot:dashboard`) listing actionable curation calls — currently only `Mark as status: stale` proposals (no compat-range or "claim adonis N support" suggestions, since only the package author can verify those).

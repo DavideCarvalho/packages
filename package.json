@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Registry of AdonisJS packages",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adonisjs-community/packages.git"
+  },
   "type": "module",
   "main": "./db.json",
   "files": ["db.json"],

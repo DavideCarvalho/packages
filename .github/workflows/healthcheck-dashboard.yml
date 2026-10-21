@@ -53,8 +53,8 @@ jobs:
               continue
             fi
             git checkout -b "$branch"
-            pnpm healthcheck:ci --apply-item "$id"
             title=$(pnpm --silent healthcheck:ci --item-title "$id")
+            pnpm healthcheck:ci --apply-item "$id"
             git add packages/ && git commit -m "$title"
             git push -u origin "$branch"
             gh pr create --title "$title" --body "Triggered by: #${{ github.event.issue.number }}" --label bot:auto-pr

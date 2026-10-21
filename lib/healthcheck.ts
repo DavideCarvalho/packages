@@ -16,8 +16,8 @@ import type { PackageInfo, PackageStatus } from "./types.ts";
 
 export interface PackageHealthData {
   newLastCommitAt: string | null;
-  newLastReleaseAt: string | null;
-  newLatestNpmVersion: string | null;
+  newLastReleaseAt: string;
+  newLatestNpmVersion: string;
   ghArchived: boolean;
 }
 
@@ -58,12 +58,12 @@ async function fetchHealthData(pkg: PackageInfo): Promise<PackageHealthData> {
   const [commitDate, ghArchived, npmInfo] = await Promise.all([
     getLastCommitDate(pkg.repo),
     isRepoArchived(pkg.repo),
-    fetchNpmPackage(pkg.npm).catch(() => null),
+    fetchNpmPackage(pkg.npm),
   ]);
   return {
     newLastCommitAt: commitDate,
-    newLastReleaseAt: npmInfo?.latestPublishedAt ?? null,
-    newLatestNpmVersion: npmInfo?.latestVersion ?? null,
+    newLastReleaseAt: npmInfo.latestPublishedAt,
+    newLatestNpmVersion: npmInfo.latestVersion,
     ghArchived,
   };
 }
@@ -75,9 +75,9 @@ function computeAutoPatch(pkg: PackageInfo, data: PackageHealthData): Partial<Pa
   const status = data.ghArchived ? "archived" : currentStatus === "stale" ? "stale" : autoStatus;
 
   return {
-    lastCommitAt: data.newLastCommitAt ?? undefined,
-    lastReleaseAt: data.newLastReleaseAt ?? undefined,
-    latestNpmVersion: data.newLatestNpmVersion ?? undefined,
+    ...(data.newLastCommitAt ? { lastCommitAt: data.newLastCommitAt } : {}),
+    lastReleaseAt: data.newLastReleaseAt,
+    latestNpmVersion: data.newLatestNpmVersion,
     status,
   };
 }

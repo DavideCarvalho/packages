@@ -19,6 +19,7 @@ export interface PackageInfo {
   name: string;
   description: string;
   repo: string;
+  directory?: string;
   npm: string;
   icon?: string;
   github: string;

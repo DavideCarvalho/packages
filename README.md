@@ -17,6 +17,8 @@ pnpm sync <name> <repo>
 
 Example: `pnpm sync lucid adonisjs/lucid`
 
+For a package living in a monorepo, create `packages/<name>.yml` with a `directory` field pointing to the package folder (e.g. `directory: packages/core`) before running `pnpm sync <name> <repo>`.
+
 To sync with a branch different than the default, suffix the repo with `#repo-branch`, example: `pnpm sync lucid adonisjs/lucid#next`.
 
 ### Contribution
@@ -59,6 +61,7 @@ The npm package also includes `icons/`. Resolve an entry's `icon` filename relat
 | `name`             | No        | Canonical name. Must match the filename. |
 | `description`      | Yes       | Short description, pulled from upstream `package.json`. |
 | `repo`             | No        | GitHub repository. Format is `org/name` or `org/name#branch`. |
+| `directory`        | No        | Folder of the package inside a monorepo, e.g. `packages/core`. `npm` and `description` are read from its `package.json`. |
 | `npm`              | Yes       | NPM package name. |
 | `icon`             | No        | Icon of the package from the [./icons](./icons) directory. |
 | `github`           | Yes       | GitHub URL, derived from `repo`. |

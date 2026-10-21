@@ -10,7 +10,7 @@ lastReleaseAt: 2026-10-08T04:23:11.774Z
 latestNpmVersion: 2.2.1
 name: nemo-adonisjs-jobs
 npm: "@nemoventures/adonis-jobs"
-repo: "@nemoventures/adonis-jobs"
+repo: nemoengineering/adonis-jobs
 status: healthy
 type: 3rd-party
 website: https://github.com/nemoengineering/adonis-jobs

@@ -6,5 +6,6 @@ compatibility:
 description: Official VS Code extension for Edge.js
 icon: edge.jpeg
 name: edge-vscode
+repo: edge-js/edge-vscode
 type: official
 website: https://marketplace.visualstudio.com/items?itemName=AdonisJS.vscode-edge

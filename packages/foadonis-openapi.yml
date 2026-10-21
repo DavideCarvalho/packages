@@ -3,11 +3,16 @@ compatibility:
   adonis:
     "6": 6.x
     "7": 7.x
-description: Generate OpenAPI V3 compliant specifications using decorators
+description: Generate OpenAPI specifications on Adonis
+directory: packages/openapi
+github: https://github.com/FriendsOfAdonis/FriendsOfAdonis
 icon: foadonis.png
 lastCommitAt: 2026-09-14T14:10:35Z
 lastReleaseAt: 2026-07-06T10:27:24.652Z
 latestNpmVersion: 1.1.0
+maintainers:
+  - github: FriendsOfAdonis
+    name: FriendsOfAdonis
 name: foadonis-openapi
 npm: "@foadonis/openapi"
 repo: FriendsOfAdonis/FriendsOfAdonis

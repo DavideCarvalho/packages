@@ -3,12 +3,16 @@ compatibility:
   adonis:
     "6": 6.x
     "7": 7.x
-description: Adonis Shopkeeper provides an expressive, fluent interface to
-  Stripe's subscription billing services.
+description: An expressive and fluent interface to Stripe's subscription billing services.
+directory: packages/shopkeeper
+github: https://github.com/FriendsOfAdonis/FriendsOfAdonis
 icon: foadonis.png
 lastCommitAt: 2026-09-14T14:10:35Z
 lastReleaseAt: 2026-05-28T10:17:39.639Z
 latestNpmVersion: 1.0.1
+maintainers:
+  - github: FriendsOfAdonis
+    name: FriendsOfAdonis
 name: foadonis-shopkeeper
 npm: "@foadonis/shopkeeper"
 repo: FriendsOfAdonis/FriendsOfAdonis

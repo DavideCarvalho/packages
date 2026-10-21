@@ -3,11 +3,16 @@ compatibility:
   adonis:
     "6": 6.x
     "7": 7.x
-description: Safely set your Adonis application in maintenance mode.
+description: Put your Adonis application in maintenance mode
+directory: packages/maintenance
+github: https://github.com/FriendsOfAdonis/FriendsOfAdonis
 icon: foadonis.png
 lastCommitAt: 2026-09-14T14:10:35Z
 lastReleaseAt: 2026-03-09T11:37:16.791Z
 latestNpmVersion: 0.1.2
+maintainers:
+  - github: FriendsOfAdonis
+    name: FriendsOfAdonis
 name: foadonis-maintenance
 npm: "@foadonis/maintenance"
 repo: FriendsOfAdonis/FriendsOfAdonis

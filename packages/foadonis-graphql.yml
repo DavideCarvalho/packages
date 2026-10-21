@@ -3,11 +3,16 @@ compatibility:
   adonis:
     "6": 6.x
     "7": 7.x
-description: Create GraphQL APIs powered by Apollo with Adonis
+description: Create GraphQL APIs with your Adonis Application.
+directory: packages/graphql
+github: https://github.com/FriendsOfAdonis/FriendsOfAdonis
 icon: foadonis.png
 lastCommitAt: 2026-09-14T14:10:35Z
 lastReleaseAt: 2026-09-14T14:12:55.477Z
 latestNpmVersion: 1.2.1
+maintainers:
+  - github: FriendsOfAdonis
+    name: FriendsOfAdonis
 name: foadonis-graphql
 npm: "@foadonis/graphql"
 repo: FriendsOfAdonis/FriendsOfAdonis

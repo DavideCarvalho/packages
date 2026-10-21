@@ -4,6 +4,7 @@ compatibility:
     "6": 6.x
     "7": 7.x
 description: Official caching module for AdonisJS framework
+icon: adonis.png
 lastCommitAt: 2026-04-08T17:16:31Z
 lastReleaseAt: 2026-04-08T17:16:30.616Z
 latestNpmVersion: 2.1.0

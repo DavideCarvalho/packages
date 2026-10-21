@@ -52,6 +52,8 @@ import db from '@adonisjs/packages'
 //      ^? { generatedAt, version, categories, packages }
 ```
 
+The npm package also includes `icons/`. Resolve an entry's `icon` filename relative to that directory and include it in your website's asset build.
+
 ### Schema
 
 | Field              | Auto sync | Description                                                                                                                  |
@@ -87,6 +89,42 @@ pnpm sync
 ```bash
 pnpm build
 ```
+
+### Configure npm publishing
+
+The release workflow publishes public packages from `v*` tags using npm trusted publishing. It runs on GitHub-hosted runners with Node.js 24 and requires no `NPM_TOKEN` secret.
+
+1. If `@adonisjs/packages` does not exist on npm, sign in with an account that can publish under `@adonisjs`. Run `pnpm install --frozen-lockfile`, `pnpm check`, and `npm pack --dry-run`. Inspect the package contents, then run `npm publish --access public` to publish the initial version.
+2. In the package's npm settings, add a GitHub Actions trusted publisher with organization `adonisjs-community`, repository `packages`, and workflow filename `release.yml`. Leave the environment blank and allow direct `npm publish`.
+3. Complete the first OIDC publication within two days of creating the trusted publisher. After it succeeds, enable "Require two-factor authentication and disallow tokens" in the npm publishing settings.
+
+See the [npm trusted publishing documentation](https://docs.npmjs.com/trusted-publishers) for account requirements and troubleshooting.
+
+### Publish a new version
+
+From a clean, up-to-date `main` checkout, run:
+
+```bash
+pnpm check
+pnpm exec tsc --noEmit
+npm version patch
+git push origin main
+git push origin "v$(node -p "require('./package.json').version")"
+```
+
+Pushing the tag publishes the package. The tag must match the version in `package.json`. Published versions cannot be reused, including the version published manually during setup.
+
+### Weekly conditional releases
+
+After `Healthcheck (weekly)` succeeds on this repository's `main` branch, `release.yml` checks out the updated `main` and builds the registry. The healthcheck runs on Mondays at 06:00 UTC. A successful manual healthcheck also triggers this comparison.
+
+The prepare job downloads `@adonisjs/packages@latest` from npm and compares its `packages` and `categories` with the local build. Object key order, `generatedAt`, and the registry's `version` do not affect the comparison. Download errors and invalid JSON fail the job instead of triggering an initial publication.
+
+If the data matches, the job does nothing. Otherwise, it uses the next patch of the published version, or keeps the local manifest version if it is already higher. The GitHub App configured for the healthcheck commits only `package.json`, creates `vVERSION`, and pushes the commit and tag atomically. If `main` advanced, the push fails rather than releasing an outdated checkout. The tag starts the existing OIDC publish job in `release.yml`; the prepare job never publishes to npm. Prepare and publish runs share a concurrency group without cancelling an active run.
+
+If publishing fails after the tag was pushed, rerun that tag's failed `Release` run. The prepare job never replaces an existing tag. Changes to packaging or icon files alone require a manual release.
+
+To simulate the comparison, run `Release` from the Actions tab on `main` with `dry_run` enabled, which is the default. The simulation can update `package.json` in its temporary checkout but does not commit, push, tag, or publish. Disable `dry_run` only to prepare a real release.
 
 ## Healthiness bot
 

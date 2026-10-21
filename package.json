@@ -1,6 +1,6 @@
 {
   "name": "@adonisjs/packages",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Registry of AdonisJS packages",
   "license": "MIT",
   "repository": {
@@ -8,7 +8,8 @@
     "url": "git+https://github.com/adonisjs-community/packages.git"
   },
   "files": [
-    "db.json"
+    "db.json",
+    "icons"
   ],
   "type": "module",
   "main": "./db.json",

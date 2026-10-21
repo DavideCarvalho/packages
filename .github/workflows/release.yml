@@ -2,9 +2,85 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_run:
+    workflows: ['Healthcheck (weekly)']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Compare with npm without committing, tagging, or publishing
+        type: boolean
+        default: true
+
+concurrency:
+  group: registry-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
+  prepare:
+    if: >-
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository) ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint GitHub App token
+        if: github.event_name != 'workflow_dispatch' || !inputs.dry_run
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+      # Read main after the healthcheck has committed its metadata updates.
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          token: ${{ steps.app-token.outputs.token || github.token }}
+          persist-credentials: ${{ github.event_name != 'workflow_dispatch' || !inputs.dry_run }}
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm exec tsc --noEmit
+      - name: Download latest published registry
+        run: npm install --ignore-scripts --no-package-lock --prefix "$RUNNER_TEMP/published-registry" @adonisjs/packages@latest
+      - name: Prepare version if registry data changed
+        id: version
+        run: |
+          VERSION=$(node --experimental-strip-types lib/prepare-release.ts "$RUNNER_TEMP/published-registry/node_modules/@adonisjs/packages/db.json")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [ -z "$VERSION" ]; then
+            echo 'Registry data matches npm. Nothing to release.'
+          else
+            echo "Prepared version $VERSION"
+          fi
+      - name: Commit and tag release
+        if: steps.version.outputs.version != '' && (github.event_name != 'workflow_dispatch' || !inputs.dry_run)
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          git config user.name "$APP_SLUG[bot]"
+          git config user.email "$APP_SLUG[bot]@users.noreply.github.com"
+          git add package.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: release $VERSION"
+          fi
+          git tag "v$VERSION"
+          # Reject both updates if main advanced since checkout.
+          git push --atomic origin HEAD:main "refs/tags/v$VERSION"
+
   publish:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: read
